@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
+    android:layout_gravity="center"
     android:background="@drawable/zadniy_fon"
     tools:context=".GameActivity">
+
     <androidx.appcompat.widget.Toolbar
 
         android:id="@+id/tulbar"
@@ -17,15 +18,18 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"/>
 
+
+       />
+
     <ImageView
         android:id="@+id/lvl1"
         android:layout_width="85dp"
         android:layout_height="85dp"
         android:src="@drawable/level"
-        app:layout_constraintStart_toStartOf="@id/tulbar"
-        app:layout_constraintEnd_toEndOf="@id/tulbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/constraint1"
+        app:layout_constraintStart_toStartOf="@id/tulbar"
+        app:layout_constraintEnd_toEndOf="@id/tulbar"/>
+
 
 
         />
@@ -52,6 +56,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/tulbar"/>
+
+    <ImageView
+        android:id="@+id/big_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:elevation="2dp"
+        app:layout_constraintStart_toStartOf="@id/image1"
+        app:layout_constraintEnd_toEndOf="@id/image2"
+        app:layout_constraintBottom_toBottomOf="@id/image3"
+        app:layout_constraintTop_toTopOf="@id/image2"
+
+        />
 
     <LinearLayout
         android:weightSum="4"
@@ -88,111 +105,92 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.65" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint1"
-        android:layout_width="360dp"
-        android:layout_height="360dp"
-        android:weightSum="2"
-        app:layout_constraintBottom_toTopOf="@id/guideline2"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.constraintlayout.widget.Guideline
 
-        app:layout_constraintStart_toStartOf="parent">
+        android:id="@+id/guideline1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
 
 
-        <LinearLayout
-            android:id="@+id/liner1"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintTop_toTopOf="@id/constraint1">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/photo1"
-                app:cardCornerRadius="8dp"
-                app:strokeWidth="4dp"
-                app:strokeColor="#00897B"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                android:layout_weight="1">
+
+
+
+
+
+
+
 
                 <ImageView
+                    android:layout_margin="3dp"
                     android:id="@+id/image1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/img" />
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@drawable/img"
+                    app:layout_constraintTop_toBottomOf="@id/tulbar"
+                    app:layout_constraintEnd_toStartOf="@id/guideline1"
+                    app:layout_constraintBottom_toTopOf="@id/image3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
 
-            </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/photo2"
-                app:strokeWidth="4dp"
-                app:cardCornerRadius="8dp"
-                app:strokeColor="#00897B"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                android:layout_weight="1">
+
+
 
                 <ImageView
+                    android:layout_margin="3dp"
                     android:id="@+id/image2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/img_1" />
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@drawable/img_1"
+                    app:layout_constraintTop_toBottomOf="@id/tulbar"
+                    app:layout_constraintStart_toEndOf="@id/guideline1"
+                    app:layout_constraintBottom_toTopOf="@id/image4"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
-            </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/liner2"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintTop_toBottomOf="@id/liner1">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/photo3"
-                app:strokeWidth="4dp"
-                app:cardCornerRadius="8dp"
-                app:strokeColor="#00897B"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                android:layout_weight="1">
+
+
+
 
                 <ImageView
+                    android:layout_margin="3dp"
                     android:id="@+id/image3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/img_2" />
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@drawable/img_2"
+                    app:layout_constraintTop_toBottomOf="@id/image1"
+                    app:layout_constraintEnd_toStartOf="@id/guideline1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/liner_33"
 
-            </com.google.android.material.card.MaterialCardView>
+                    />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/photo4"
-                app:strokeWidth="4dp"
-                app:cardCornerRadius="8dp"
-                app:strokeColor="#00897B"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                android:layout_weight="1">
+
+
+
 
                 <ImageView
+                    android:layout_margin="3dp"
                     android:id="@+id/image4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/img_3" />
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@drawable/img_3"
+                    app:layout_constraintStart_toStartOf="@id/guideline1"
+                    app:layout_constraintTop_toBottomOf="@id/image2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/liner_33"
+                    />
 
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
     <LinearLayout
         android:background="@drawable/shape_option_bg"
@@ -201,9 +199,12 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:weightSum="6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/liner_2"
         app:layout_constraintBottom_toTopOf="@id/guideline3"
-        app:layout_constraintEnd_toEndOf="@id/constraint1"
-        app:layout_constraintStart_toStartOf="@id/constraint1">
+
+        >
 
         <com.google.android.material.card.MaterialCardView
             app:cardCornerRadius="6dp"
@@ -341,9 +342,12 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:weightSum="6"
-        app:layout_constraintBottom_toTopOf="@id/liner_1"
-        app:layout_constraintEnd_toEndOf="@id/constraint1"
-        app:layout_constraintStart_toStartOf="@id/constraint1">
+     app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/liner_33"
+        app:layout_constraintBottom_toTopOf="@id/liner_2"
+
+        >
 
 
 
@@ -509,10 +513,13 @@
         android:orientation="horizontal"
         android:weightSum="8"
         android:elevation="2dp"
-        app:layout_constraintTop_toBottomOf="@id/constraint1"
-        app:layout_constraintBottom_toTopOf="@id/liner_2"
-        app:layout_constraintEnd_toEndOf="@id/constraint1"
-        app:layout_constraintStart_toStartOf="@id/constraint1">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline2"
+
+
+
+        >
 
 
 

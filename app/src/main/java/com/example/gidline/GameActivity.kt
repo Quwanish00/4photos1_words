@@ -7,7 +7,11 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.tts.TextToSpeech
+import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -18,25 +22,18 @@ import kotlin.random.Random
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
     private lateinit var questions: List<Question>
+    var clickedImageId = -1
     private var optionLetters = mutableListOf<TextView>()
     private var answerLetters = mutableListOf<TextView>()
-    private val currentAnswers = mutableListOf<Pair<TextView,String>>()
+    private val currentAnswers = mutableListOf<Pair<String, TextView>>()
     private val currentOptions = mutableListOf<Char>()
     private var currentQuestionId = -1
-    private var lvl = 0
     override fun onCreate(savedInstanceState: Bundle?) {
 //        val sharedPreferences:SharedPreferences=getSharedPreferences("level",Context.MODE_PRIVATE)
 
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        currentQuestionId = 0
-        binding.back.setOnClickListener {
-
-            val intent= Intent(this,MainActivity::class.java)
-            startActivity(intent)
-        }
 
 
 
@@ -58,6 +55,19 @@ class GameActivity : AppCompatActivity() {
 
             )
 
+        }
+        optionLetters.forEach { optionTV ->
+            optionTV.addTextChangedListener {
+                val letter = it.toString()
+                optionTV.isEnabled = letter.isNotEmpty()
+            }
+        }
+
+        answerLetters.forEach { answerTV ->
+            answerTV.addTextChangedListener {
+                val letter = it.toString()
+                answerTV.isEnabled = letter.isNotEmpty()
+            }
         }
         currentQuestionId++
         setQuestion()
@@ -86,32 +96,68 @@ class GameActivity : AppCompatActivity() {
             answer8.setOnClickListener { answerClick(it as TextView) }
 
             binding.continuee.setOnClickListener {
-                answerLetters.clear()
+                baraban.isVisible= false
                 currentQuestionId++
                 setQuestion()
-                answerLetters.forEach {
-                    it.isClickable=true
-                    it.isEnabled=true
-                }
-                optionLetters.forEach {
-                    it.isClickable=true
-                    it.isEnabled=true
-                }
+
+            }
+            image1.setOnClickListener {
+                clickedImageId = 0
+                bigImage.setImageResource(questions[currentQuestionId].images[0])
+                bigImage.isVisible = true
+                bigImage.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        this@GameActivity, R.anim.animation_up_one
+                    )
+                )
             }
 
-            option1.addTextChangedListener {
-                val letter =it.toString()
-                if(letter.isNotEmpty()){
-                    option1.isEnabled=true
-                }
+            image2.setOnClickListener {
+                clickedImageId = 1
+                bigImage.setImageResource(questions[currentQuestionId].images[1])
+                bigImage.isVisible = true
+                bigImage.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        this@GameActivity, R.anim.animation_up_two
+                    )
+                )
             }
+
+            bigImage.setOnClickListener {
+                when(clickedImageId){
+                    0-> {
+                        bigImage.startAnimation(AnimationUtils.loadAnimation(
+                            this@GameActivity,R.anim.animation_down_one
+                        ))
+                    }
+                    1 -> {
+                        bigImage.startAnimation(
+                            AnimationUtils.loadAnimation(
+                                this@GameActivity, R.anim.animation_down_two
+                            )
+                        )
+                    }
+                }
+                Handler(Looper.myLooper()!!).postDelayed({
+                    bigImage.isVisible = false
+                }, 200L)
+            }
+        }
+
+
+
+
+
+
+
+
+
 
 
         }
 
 
 
-    }
 
     @SuppressLint("SetTextI18n")
     private fun setQuestion() {
@@ -147,6 +193,7 @@ class GameActivity : AppCompatActivity() {
             }
             answerLetters.forEach {
                 it.isVisible = true
+                it.isClickable=true
             }
 
             for (i in currentQuestion.answer.length until answerLetters.size) {
@@ -167,10 +214,15 @@ class GameActivity : AppCompatActivity() {
             view.isVisible = show
             baraban.isVisible = show
 
-            answerLetters.forEach {
-                it.isClickable =false
-            }
+            baraban.startAnimation(
+                AnimationUtils.loadAnimation(
+                    this@GameActivity,R.anim.rotate_animation
+                )
+            )
 
+            answerLetters.forEach {
+                it.isClickable = false
+            }
 
 
         }
@@ -182,109 +234,69 @@ class GameActivity : AppCompatActivity() {
         val index = optionLetters.indexOf(optionTv)
         val letter = currentOptions[index]
 
-        val pairIndex =currentAnswers.indexOfFirst { it.second == "" }
-        if(pairIndex == -1){
-            currentAnswers.add(Pair(optionTv,letter.toString()))
-        }
-        else{
-            currentAnswers[pairIndex]=Pair(optionTv,letter.toString())
+        val pairIndex = currentAnswers.indexOfFirst { it.first == "" }
+        if (pairIndex == -1) {
+            currentAnswers.add(Pair(letter.toString(),optionTv))
+        } else {
+            currentAnswers[pairIndex] = Pair(letter.toString(),optionTv)
         }
 
         updateAnswer(currentQuestion)
         optionTv.text = ""
 
-        if (currentQuestion.answer.length == currentAnswers.size) {
 
-            if (currentQuestion.answer == currentAnswers.map { it.second }. joinToString("")) {
-                showContinue(true)
-
-
-
-
-            }
-                binding.apply {
-                    answer1.setTextColor(Color.RED)
-                    answer2.setTextColor(Color.RED)
-                    answer3.setTextColor(Color.RED)
-                    answer4.setTextColor(Color.RED)
-                    answer5.setTextColor(Color.RED)
-                    answer6.setTextColor(Color.RED)
-                    answer7.setTextColor(Color.RED)
-                    answer8.setTextColor(Color.RED)
-                }
-                optionLetters.forEach { option ->
-                    option.isClickable = false
-
-                }
-
-        }
     }
-    private fun answerClick(answerTv:TextView){
-        binding.apply {
-            answer1.setTextColor(Color.WHITE)
-            answer2.setTextColor(Color.WHITE)
-            answer3.setTextColor(Color.WHITE)
-            answer4.setTextColor(Color.WHITE)
-            answer5.setTextColor(Color.WHITE)
-            answer6.setTextColor(Color.WHITE)
-            answer7.setTextColor(Color.WHITE)
-            answer8.setTextColor(Color.WHITE)
-        }
+
+    private fun answerClick(answerTv: TextView) {
+
+        answerTv.text = ""
+        val index = answerLetters.indexOf(answerTv)
+        val pair = currentAnswers[index]
 
 
-        answerTv.text=""
-        val index=answerLetters.indexOf(answerTv)
-        val pair= currentAnswers[index]
+        pair.second.text = pair.first
+        currentAnswers[index] = Pair( "",pair.second)
+        updateAnswer(questions[currentQuestionId])
 
 
-        pair.first.text = pair.second
-        currentAnswers[index] = Pair(pair.first,"")
 
 
-        answerLetters.forEach { answer->
-
-            answer.addTextChangedListener {
-                val answeR=answer.toString()
-                answer.isEnabled=answeR.isNotEmpty()
-            }
-
-        }
-        
     }
 
     private fun updateAnswer(question: Question) {
-        currentAnswers.forEachIndexed { index, letter ->
-            if (letter.second !=""){
-                answerLetters[index].text = letter.second
+        if(currentAnswers.isEmpty()){
+            answerLetters.forEach {
+                it.text = ""
             }
+            optionLetters.forEach {
+                it.isClickable = true
+            }
+            return
         }
-        if (question.answer.length == currentAnswers.size) {
 
-            if (question.answer == currentAnswers.map { it.second }. joinToString("")) {
+        currentAnswers.forEachIndexed { index, letter ->
+                answerLetters[index].text = letter.first
+
+        }
+        if (question.answer.length == currentAnswers.filter { it.first.isNotEmpty() }.size) {
+
+            if (question.answer == currentAnswers.map { it.first }.joinToString("")) {
                 showContinue(true)
 
 
-
-
-            }
-            binding.apply {
-                answer1.setTextColor(Color.RED)
-                answer2.setTextColor(Color.RED)
-                answer3.setTextColor(Color.RED)
-                answer4.setTextColor(Color.RED)
-                answer5.setTextColor(Color.RED)
-                answer6.setTextColor(Color.RED)
-                answer7.setTextColor(Color.RED)
-                answer8.setTextColor(Color.RED)
             }
             optionLetters.forEach { option ->
                 option.isClickable = false
 
             }
 
+        } else {
+            optionLetters.forEach { option ->
+                option.isClickable = true
+            }
+
         }
 
+
     }
-
-
 }
