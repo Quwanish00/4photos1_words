@@ -1,6 +1,9 @@
 package com.example.gidline
 
 object Constants {
+    const val PREFS = "fourPicsOneWordPrefs"
+    const val LEVEL = "currentLevel"
+    const val CYCLE = "levelCycle"
 
     fun setQuestions():List<Question>{
     return listOf(
@@ -24,7 +27,7 @@ object Constants {
                 R.drawable.img_2,
                 R.drawable.img_3
             ),
-            answer = "ХОЛОД"
+            answer = "ГРОМКО"
 
         ),
         Question(
@@ -35,7 +38,7 @@ object Constants {
                 R.drawable.img_2,
                 R.drawable.img_3
             ),
-            answer = "ХОЛОД"
+            answer = "МУЗЫКА"
 
         ),
         Question(

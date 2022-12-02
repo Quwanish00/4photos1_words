@@ -23,6 +23,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
     private lateinit var questions: List<Question>
     var clickedImageId = -1
+    private lateinit var prefs: SharedPreferences
     private var optionLetters = mutableListOf<TextView>()
     private var answerLetters = mutableListOf<TextView>()
     private val currentAnswers = mutableListOf<Pair<String, TextView>>()
@@ -163,11 +164,15 @@ class GameActivity : AppCompatActivity() {
     private fun setQuestion() {
 
         val currentQuestion = questions[currentQuestionId]
+        prefs.edit().putInt(Constants.LEVEL,currentQuestionId).apply()
 
         binding.apply {
             currentAnswers.clear()
             updateAnswer(currentQuestion)
             showContinue(false)
+
+            val cycle = prefs.getInt(Constants.CYCLE, 0)
+            lvlText.text = (cycle * questions.size + currentQuestionId + 1).toString()
 
             lvlText.text = (currentQuestionId + 1).toString()
 
